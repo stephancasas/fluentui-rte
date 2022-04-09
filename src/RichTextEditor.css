@@ -2,7 +2,7 @@
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 3px;
-  font-family: 'Georgia', serif;
+  font-family: 'Segoe Ui Light', sans-serif;
   font-size: 14px;
 }
 
@@ -50,7 +50,7 @@
 
 .editor .codeBlock {
   background-color: #f3f3f3;
-  font-family: "Inconsolata", "Menlo", "Consolas", monospace;
+  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
   font-size: 16px;
   /* This should collapse with the margin around the parent <pre>. */
   margin: 14px 0;

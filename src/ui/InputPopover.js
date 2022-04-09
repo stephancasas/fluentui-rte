@@ -1,5 +1,5 @@
 /* @flow */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import IconButton from './IconButton';
 import ButtonGroup from './ButtonGroup';
@@ -8,22 +8,24 @@ import cx from 'classnames';
 
 import styles from './InputPopover.css';
 
+import { TextField, Stack, Checkbox } from '@fluentui/react';
+
 type CheckOptionValues = {
-  [key: string]: boolean;
+  [key: string]: boolean,
 };
 
 type Props = {
-  className?: string;
-  defaultValue?: string;
+  className?: string,
+  defaultValue?: string,
   checkOptions?: {
-    [key: string]: { label: string, defaultValue: boolean };
-  };
-  onCancel: () => any;
-  onSubmit: (value: string, checkOptionValues: CheckOptionValues) => any;
+    [key: string]: { label: string, defaultValue: boolean },
+  },
+  onCancel: () => any,
+  onSubmit: (value: string, checkOptionValues: CheckOptionValues) => any,
 };
 
 type State = {
-  checkOptionValues: CheckOptionValues
+  checkOptionValues: CheckOptionValues,
 };
 
 export default class InputPopover extends Component {
@@ -34,11 +36,11 @@ export default class InputPopover extends Component {
   constructor() {
     super(...arguments);
     autobind(this);
-    let {checkOptions} = this.props;
+    let { checkOptions } = this.props;
     let checkOptionValues: CheckOptionValues = {};
     if (checkOptions) {
       for (let key of Object.keys(checkOptions)) {
-        let {defaultValue} = checkOptions[key];
+        let { defaultValue } = checkOptions[key];
         checkOptionValues[key] = defaultValue;
       }
     }
@@ -61,20 +63,17 @@ export default class InputPopover extends Component {
   }
 
   render() {
-    let {props} = this;
-    let className = cx(props.className, styles.root);
+    let { props } = this;
     return (
-      <div className={className}>
-        <div className={styles.inner}>
-          <input
+      <Stack tokens={{ padding: 6, childrenGap: 6 }}>
+        <Stack horizontal tokens={{ childrenGap: 4 }}>
+          <TextField
             ref={this._setInputRef}
             defaultValue={props.defaultValue}
-            type="text"
             placeholder="https://example.com/"
-            className={styles.input}
             onKeyPress={this._onInputKeyPress}
           />
-          <ButtonGroup className={styles.buttonGroup}>
+          <ButtonGroup>
             <IconButton
               label="Cancel"
               iconName="cancel"
@@ -86,9 +85,9 @@ export default class InputPopover extends Component {
               onClick={this._onSubmit}
             />
           </ButtonGroup>
-        </div>
+        </Stack>
         {this._renderCheckOptions()}
-      </div>
+      </Stack>
     );
   }
 
@@ -96,19 +95,17 @@ export default class InputPopover extends Component {
     if (!this.props.checkOptions) {
       return null;
     }
-    let {checkOptions} = this.props;
+    let { checkOptions } = this.props;
     return Object.keys(checkOptions).map((key) => {
-      let label = checkOptions && checkOptions[key] ? checkOptions[key].label : '';
+      let label =
+        checkOptions && checkOptions[key] ? checkOptions[key].label : '';
       return (
-        <div key={key} className={styles.checkOption}>
-          <label>
-            <input
-              type="checkbox"
-              checked={this.state.checkOptionValues[key]}
-              onChange={() => this._onCheckOptionPress(key)}
-            />
-            <span>{label}</span>
-          </label>
+        <div key={key}>
+          <Checkbox
+            label={label}
+            checked={this.state.checkOptionValues[key]}
+            onChange={() => this._onCheckOptionPress(key)}
+          />
         </div>
       );
     });
@@ -119,9 +116,9 @@ export default class InputPopover extends Component {
   }
 
   _onCheckOptionPress(key: string) {
-    let {checkOptionValues} = this.state;
+    let { checkOptionValues } = this.state;
     let oldValue = Boolean(checkOptionValues[key]);
-    let newCheckOptionValues = {...checkOptionValues, [key]: !oldValue};
+    let newCheckOptionValues = { ...checkOptionValues, [key]: !oldValue };
     this.setState({
       checkOptionValues: newCheckOptionValues,
     });

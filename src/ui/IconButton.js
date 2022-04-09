@@ -1,39 +1,58 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import cx from 'classnames';
 import Button from './Button';
 import ButtonWrap from './ButtonWrap';
 
-import styles from './IconButton.css';
+import { IconButton as FluentIconButton, getTheme } from '@fluentui/react';
+import FluentUiIconMap from '../lib/FluentUiIconMap';
+
+const SemanticColors = getTheme().semanticColors;
+const ThemeColors = getTheme().palette;
 
 type Props = {
-  iconName: string;
-  isActive?: boolean;
-  children?: ReactNode;
-  className?: string;
-  label?: string;
-  isSwitch?: boolean;
+  iconName: string,
+  isActive?: boolean,
+  children?: ReactNode,
+  className?: string,
+  label?: string,
+  isSwitch?: boolean,
 };
 
 export default class IconButton extends Component {
   props: Props;
 
   render() {
-    let {props} = this;
-    let {className, iconName, label, children, isActive, isSwitch, ...otherProps} = props;
-    className = cx(className, {
-      [styles.root]: true,
-      [styles.isActive]: isActive,
-    });
+    let { props } = this;
+    let {
+      className,
+      iconName,
+      label,
+      children,
+      isActive,
+      isSwitch,
+      ...otherProps
+    } = props;
+
     return (
-      <ButtonWrap>
-        <Button {...otherProps} title={label} className={className} role={isSwitch && 'switch'} aria-checked={isActive}>
-          <span className={styles['icon-' + iconName]} />
-          {/* TODO: add text label here with aria-hidden */}
-        </Button>
-        {children}
-      </ButtonWrap>
+      <FluentIconButton
+        {...otherProps}
+        secondaryText={label}
+        iconProps={{ iconName: FluentUiIconMap[iconName] }}
+        className={className}
+        aria-checked={isActive}
+        checked={isActive}
+        styles={{
+          icon: { color: SemanticColors.buttonText },
+          rootChecked: {
+            backgroundColor: ThemeColors.themeLight,
+          },
+          rootCheckedHovered: {
+            backgroundColor: ThemeColors.themeTertiary,
+          },
+        }}
+      />
     );
   }
 }

@@ -1,19 +1,20 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import IconButton from './IconButton';
 import InputPopover from './InputPopover';
 import autobind from 'class-autobind';
+import { Callout } from '@fluentui/react';
 
 type Props = {
-  iconName: string;
+  iconName: string,
   showPopover: boolean,
   defaultValue?: string,
   checkOptions?: {
-    [key: string]: { label: string, defaultValue: boolean };
-  };
+    [key: string]: { label: string, defaultValue: boolean },
+  },
   onTogglePopover: Function,
-  onSubmit: Function;
+  onSubmit: Function,
 };
 
 export default class PopoverIconButton extends Component {
@@ -25,11 +26,26 @@ export default class PopoverIconButton extends Component {
   }
 
   render() {
-    let {onTogglePopover, showPopover, checkOptions, ...props} = this.props; // eslint-disable-line no-unused-vars
+    let { onTogglePopover, showPopover, checkOptions, ...props } = this.props; // eslint-disable-line no-unused-vars
     return (
-      <IconButton {...props} onClick={onTogglePopover}>
-        {this._renderPopover()}
-      </IconButton>
+      <div>
+        <IconButton id={props.iconName} {...props} onClick={onTogglePopover}>
+          {/* {this._renderPopover()} */}
+        </IconButton>
+        {this.props.showPopover && (
+          <Callout
+            target={`#${this.props.iconName}`}
+            onDismiss={onTogglePopover}
+          >
+            <InputPopover
+              defaultValue={this.props.defaultValue}
+              checkOptions={this.props.checkOptions}
+              onSubmit={this._onSubmit}
+              onCancel={this._hidePopover}
+            />
+          </Callout>
+        )}
+      </div>
     );
   }
 
